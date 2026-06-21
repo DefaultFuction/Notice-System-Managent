@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .app {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+        .header h1 {
+            color: white;
+            font-weight: 700;
+            font-size: 28px;
+            letter-spacing: -0.5px;
+        }
+        .header h1 span {
+            opacity: 0.8;
+            font-weight: 300;
+        }
+        .search-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .search-section input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid #e8ecf1;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            background: #f8f9fb;
+        }
+        .search-section input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        .search-section button {
+            padding: 14px 36px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .search-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .results-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .results-header .keyword {
+            background: #667eea;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .notice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
+        .notice-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .notice-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+        }
+        .notice-card .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .notice-card .title a {
+            color: #1a1a2e;
+            text-decoration: none;
+        }
+        .notice-card .title a:hover {
+            color: #667eea;
+        }
+        .notice-card .meta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            color: #8892b0;
+            font-size: 13px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .notice-card .meta .author {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .notice-card .meta .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .notice-card .content-preview {
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .notice-card .actions {
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #f0f2f5;
+            padding-top: 16px;
+        }
+        .notice-card .actions a {
+            padding: 6px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .notice-card .actions .edit {
+            background: #eef2ff;
+            color: #667eea;
+        }
+        .notice-card .actions .edit:hover {
+            background: #667eea;
+            color: white;
+        }
+        .notice-card .actions .delete {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+        .notice-card .actions .delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+        .notice-card .actions .view {
+            background: #f0f2f5;
+            color: #4a5568;
+        }
+        .notice-card .actions .view:hover {
+            background: #1a1a2e;
+            color: white;
+        }
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+        }
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            color: #1a1a2e;
+            font-weight: 600;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        .empty-state p {
+            color: #8892b0;
+            font-size: 15px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .header { padding: 24px 20px; text-align: center; }
+            .search-section { flex-direction: column; }
+            .search-section input { width: 100%; }
+            .search-section button { width: 100%; }
+            .notice-grid { grid-template-columns: 1fr; }
+            .results-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <h1>🔍 Search <span>Results</span></h1>
+    </div>
+
+    <div class="search-section">
+        <input type="text" id="searchInput" placeholder="Search notices..." th:value="${keyword}" onkeypress="if(event.key==='enter'){window.location.href='/search?keyword='+encodeURIComponent(this.value)}">
+        <button onclick="window.location.href='/search?keyword='+encodeURIComponent(document.getElementById('searchInput').value)">🔍 Search</button>
+    </div>
+
+    <div class="results-header">
+        <h2>
+            <span th:if="${keyword}">Results for:</span>
+            <span th:if="${!keyword}">All Notices</span>
+        </h2>
+        <span class="keyword" th:if="${keyword}" th:text="'🔍 ' + ${keyword}"></span>
+    </div>
+
+    <div class="notice-grid">
+        <div th:each="notice : ${notices}" class="notice-card">
+            <div class="title">
+                <a th:href="'/detail?id=' + ${notice.id}" th:text="${notice.title}">Title</a>
+            </div>
+            <div class="meta">
+                    <span class="author">
+                        <span class="avatar" th:text="${#strings.substring(notice.author, 0, 1)}">A</span>
+                        <span th:text="${notice.author}">admin</span>
+                    </span>
+                <span>🕐 <span th:text="${notice.createTime}">2024-01-01</span></span>
+            </div>
+            <div class="content-preview" th:text="${notice.content}">Content...</div>
+            <div class="actions">
+                <a th:href="'/detail?id=' + ${notice.id}" class="view">👁 View</a>
+                <a th:href="'/edit?id=' + ${notice.id}" class="edit">✏️ Edit</a>
+                <a th:href="'/delete?id=' + ${notice.id}" class="delete" onclick="return confirm('Delete?')">🗑 Delete</a>
+            </div>
+        </div>
+        <div class="empty-state" th:if="${notices.isEmpty()}">
+            <div class="icon">🔍</div>
+            <h3>No results found</h3>
+            <p th:if="${keyword}" th:text="'No notices match \'' + ${keyword} + '\''">No results</p>
+            <p th:if="${!keyword}">There are no notices yet. Create one!</p>
+            <a href="/" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <div style="text-align:center;margin-top:30px;">
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+</div>
+</body>
+</html>

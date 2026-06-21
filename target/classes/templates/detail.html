@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Notice Detail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 720px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 44px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .back-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .back-header a {
+            color: #8892b0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .back-header a:hover {
+            color: #667eea;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #eef2ff;
+            color: #667eea;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        .meta {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            color: #8892b0;
+            font-size: 14px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f2f5;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .meta .author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .meta .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #2d3748;
+            padding: 20px;
+            background: #f8f9fb;
+            border-radius: 12px;
+            margin-bottom: 28px;
+            min-height: 120px;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+        }
+        .actions a {
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .actions .edit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .actions .edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        .actions .delete {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+        .actions .delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+        .actions .back {
+            background: #f0f2f5;
+            color: #4a5568;
+        }
+        .actions .back:hover {
+            background: #e2e6ee;
+        }
+        @media (max-width: 640px) {
+            .container { padding: 24px; }
+            .title { font-size: 22px; }
+            .actions { flex-wrap: wrap; }
+            .actions a { flex: 1; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="back-header">
+        <a href="/">← Back to Home</a>
+        <span class="badge">Notice</span>
+    </div>
+
+    <div th:if="${notice}">
+        <div class="title" th:text="${notice.title}">Notice Title</div>
+        <div class="meta">
+                <span class="author">
+                    <span class="avatar" th:text="${#strings.substring(notice.author, 0, 1)}">A</span>
+                    <span th:text="${notice.author}">admin</span>
+                </span>
+            <span>🕐 <span th:text="${notice.createTime}">2024-01-01</span></span>
+        </div>
+        <div class="content" th:utext="${notice.content}">Notice content goes here...</div>
+
+        <div class="actions">
+            <a th:href="'/edit?id=' + ${notice.id}" class="edit">✏️ Edit</a>
+            <a th:href="'/delete?id=' + ${notice.id}" class="delete" onclick="return confirm('Delete this notice?')">🗑 Delete</a>
+            <a href="/" class="back">🏠 Home</a>
+        </div>
+    </div>
+
+    <div th:if="${!notice}" style="text-align:center;padding:40px 0;">
+        <div style="font-size:48px;margin-bottom:16px;">😕</div>
+        <h3 style="color:#1a1a2e;">Notice not found</h3>
+        <p style="color:#8892b0;margin-top:8px;">The notice you're looking for doesn't exist.</p>
+        <a href="/" style="display:inline-block;margin-top:16px;color:#667eea;text-decoration:none;font-weight:500;">← Back to Home</a>
+    </div>
+</div>
+</body>
+</html>
